@@ -2,6 +2,7 @@ import tkinter as tk
 import Minesweeper
 
 game_over = False
+remaining_label:tk.Label
 
 class Cell:
     is_mine=False
@@ -39,9 +40,15 @@ class Cell:
                 #    Cell.all_cells[i].btn.bind('<Button-1>', None)
                 global game_over
                 game_over = True
+                remaining_label.configure(text="You Lose.", bg="red")
+                print(Cell.tiles_to_clear)
+                remaining_label.pack()
                 Minesweeper.game_over()
             else:
                 Cell.tiles_to_clear -= 1
+                remaining_label.configure(text=Cell.tiles_to_clear)
+                print(Cell.tiles_to_clear)
+                remaining_label.pack()
                 num=0
                 adj = self.get_adjacents()
                 for i in range (len(adj)): 
@@ -52,6 +59,9 @@ class Cell:
                     for i in range (len(adj)): 
                         adj[i].reveal()
                 if (Cell.tiles_to_clear == 0):
+                    remaining_label.configure(text="You Win!", bg="green2")
+                    print(Cell.tiles_to_clear)
+                    remaining_label.pack()
                     Minesweeper.game_win()
                     
                     

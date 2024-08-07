@@ -4,7 +4,7 @@ import random
 
 WIDTH = 600
 HEIGHT = 600
-TOP_HEIGHT = HEIGHT*(2/10)
+TOP_HEIGHT = 3
 BIG_HEIGHT = HEIGHT + TOP_HEIGHT
 NUM_ROWS = 10
 NUM_COLS = 10
@@ -12,17 +12,20 @@ NUM_MINES = 10
 CELL_W = WIDTH/NUM_COLS
 CELL_H = HEIGHT/NUM_ROWS
 
+TO_REVEAL = NUM_ROWS * NUM_COLS - NUM_MINES
+
+
 class Minesweeper:
 
     flagCount = 0
     totalMines = 0
     field = [Cell]
 
-    def __init__(self, root):
-        top_frame = Frame(root, width=WIDTH, height = TOP_HEIGHT, bg = "gray14")
-        top_frame.pack()
-        self.remaining_label = Label(text=Cell.Cell.tiles_to_clear)
-        self.remaining_label.place(y=TOP_HEIGHT/2)
+    def __init__(self, root, remaining_label):
+        remaining_label.pack()
+        #top_frame = Frame(root, width=WIDTH, height = TOP_HEIGHT, bg = "gray14")
+        #top_frame.pack()
+        Cell.remaining_label = remaining_label
         main_frame = Frame(root, width=WIDTH, height = HEIGHT, bg = "gray")
         main_frame.pack()
         for i in range (0,NUM_ROWS):
@@ -57,14 +60,21 @@ def game_over():
 def game_win():
     print("You Win!")
 
-def main():
+def update_counter(num):
+    global remaining_label
+    Minesweeper.remaining_label.config(text=num)
 
-    root = Tk()
+def main():
+    root:Tk = Tk()
+    remaining_label = Label(master=root, width=500, bg= "gray64", height =int(TOP_HEIGHT), text=TO_REVEAL)
     root.title("Minesweeper")
     root.geometry(str(WIDTH) + "x" + str(int(BIG_HEIGHT)))
     root.configure(bg="black")
-    game = Minesweeper(root)
+    game = Minesweeper(root, remaining_label)
+    remaining_label.pack()
+    root.update()
     root.mainloop()
+
 
 if __name__ == "__main__":
     main()
